@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:whatsappclone/search.dart';
 
 void main() {
   runApp(MyApp());
@@ -8,176 +8,626 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark.copyWith(
-          statusBarColor: Colors.white.withOpacity(0.0),
-        ),
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: MyHomePage(),
-        ));
+    return MaterialApp(
+      home: WhatsAppClone(),
+    );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class WhatsAppClone extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _MyHomePageState();
+    return WhatsAppCloneState();
   }
 }
 
-class _MyHomePageState extends State<MyHomePage>
+class WhatsAppCloneState extends State<WhatsAppClone>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-
-  @override
   void initState() {
-    _tabController = new TabController(length: 4, vsync: this);
+    _tabController = new TabController(length: 4, vsync: this, initialIndex: 1);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark.copyWith(
-        statusBarColor: Colors.orange.withOpacity(0.9),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.teal[900],
-          title: Text(
-            'WhatsApp Clone',
-          ),
-          actions: <Widget>[
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: Icon(
-                    Icons.search,
-                  ),
-                ),
-                Icon(
-                  Icons.more_vert,
-                ),
-              ],
-            )
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.teal[900],
+        title: Text('WhatsApp Clone'),
+        actions: <Widget>[
+          Row(
+            children: <Widget>[
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (c, a1, a2) => SearchPage(),
+                      transitionsBuilder: (c, anim, a2, child) =>
+                          FadeTransition(opacity: anim, child: child),
+                      transitionDuration: Duration(milliseconds: 0),
+                    ),
+                  );
+                },
+                child: Icon(Icons.search),
+              ),
+              Icon(Icons.more_vert),
+            ],
+          )
+        ],
+        bottom: TabBar(
+          indicatorColor: Colors.white,
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(
+              icon: Icon(Icons.camera_alt),
+            ),
+            Tab(
+              text: 'CHATS',
+            ),
+            Tab(
+              text: 'STATUS',
+            ),
+            Tab(
+              text: 'CALLS',
+            ),
           ],
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(40),
-            child: Align(
-              alignment: Alignment.bottomLeft,
-              child: TabBar(
-                unselectedLabelColor: Colors.white,
-                labelColor: Colors.white,
-                // indicator: UnderlineTabIndicator(
-                //     borderSide: BorderSide(width: 5.0),
-                //     insets: EdgeInsets.symmetric(horizontal: 16.0)),
-                // labelPadding: EdgeInsets.only(left: 8, right: 8),
-                tabs: [
-                  new Tab(
-                    icon: new Icon(
-                      Icons.camera_alt,
-                    ),
-                  ),
-                  new Tab(text: 'CHATS'),
-                  new Tab(text: 'STATUS'),
-                  new Tab(text: 'CALLS'),
-                ],
-                controller: _tabController,
-                indicatorColor: Colors.white,
-                indicatorSize: TabBarIndicatorSize.tab,
-              ),
-            ),
-          ),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [Colors.orange, Colors.grey],
-              ),
-            ),
-          ),
-          bottomOpacity: 1,
         ),
-        body: TabBarView(
-          physics: BouncingScrollPhysics(),
-          children: [
-            Container(
-              // width: 50,
-              child: new Text("This is call Tab View"),
-            ),
-            // Container(
-            //     margin: EdgeInsets.all(40),
-            //     child:
-            Column(children: <Widget>[
-              SizedBox(
-                height: 10,
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          Center(
+            child: Container(
+              child: Icon(
+                Icons.camera_alt,
+                size: 80.0,
+                color: Colors.black45,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(03.0),
-                    margin: EdgeInsets.only(left: 10.0),
-                    height: 55.0,
-                    width: 55.0,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(
-                          'https://cdn.pixabay.com/photo/2016/04/25/18/07/halcyon-1352522_960_720.jpg'),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: Stack(
-                      alignment: Alignment.bottomLeft,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10, left: 10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Row(
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 20.0),
-                          child: Text(
-                            'Akhays kumar',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
+                        Container(
+                          height: 60.0,
+                          width: 60.0,
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                'https://cdn.pixabay.com/photo/2016/04/25/18/07/halcyon-1352522_960_720.jpg'),
                           ),
                         ),
-                        Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.done_all,
-                              color: Colors.lightBlue,
-                              size: 18,
-                            ),
-                            // Icon(Icons.done),
-                            Padding(
-                              padding: EdgeInsets.only(left: 05.0),
-                              child: Text(
-                                'hi',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.black45),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 20.0),
+                                child: Text(
+                                  'M.kewat',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                          ],
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.done_all,
+                                    color: Colors.blue,
+                                    size: 18.0,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 05.0),
+                                    child: Text(
+                                      'hi',
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black45),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 70.0),
+                      child: Divider(),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          height: 60.0,
+                          width: 60.0,
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                'https://cdn.pixabay.com/photo/2016/04/25/18/07/halcyon-1352522_960_720.jpg'),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 20.0),
+                                child: Text(
+                                  'M.kewat',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.done_all,
+                                    color: Colors.blue,
+                                    size: 18.0,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 05.0),
+                                    child: Text(
+                                      'hi',
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black45),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 70.0),
+                      child: Divider(),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          height: 60.0,
+                          width: 60.0,
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                'https://cdn.pixabay.com/photo/2016/04/25/18/07/halcyon-1352522_960_720.jpg'),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 20.0),
+                                child: Text(
+                                  'M.kewat',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.done_all,
+                                    color: Colors.blue,
+                                    size: 18.0,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 05.0),
+                                    child: Text(
+                                      'hi',
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black45),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 70.0),
+                      child: Divider(),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          height: 60.0,
+                          width: 60.0,
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                'https://cdn.pixabay.com/photo/2016/04/25/18/07/halcyon-1352522_960_720.jpg'),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 20.0),
+                                child: Text(
+                                  'M.kewat',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.done_all,
+                                    color: Colors.blue,
+                                    size: 18.0,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 05.0),
+                                    child: Text(
+                                      'hi',
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black45),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 70.0),
+                      child: Divider(),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          height: 60.0,
+                          width: 60.0,
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                'https://cdn.pixabay.com/photo/2016/04/25/18/07/halcyon-1352522_960_720.jpg'),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 20.0),
+                                child: Text(
+                                  'M.kewat',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.done_all,
+                                    color: Colors.blue,
+                                    size: 18.0,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 05.0),
+                                    child: Text(
+                                      'hi',
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black45),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Container(
+                        height: 60.0,
+                        width: 60.0,
+                        color: Colors.white,
+                        child: Material(
+                          borderRadius: BorderRadius.circular(50.0),
+                          color: Colors.green,
+                          elevation: 2.0,
+                          child: Icon(
+                            Icons.message,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10.0, left: 10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Stack(
+                          children: <Widget>[
+                            Container(
+                              height: 60.0,
+                              width: 60.0,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    'https://cdn.pixabay.com/photo/2016/04/25/18/07/halcyon-1352522_960_720.jpg'),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: -1.0,
+                              right: 1.0,
+                              child: Container(
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                  color: Colors.green[500],
+                                  elevation: 0.0,
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 20.0,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 20.0),
+                                child: Text(
+                                  'My Status',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Text(
+                                'Tap to add status uodate',
+                                style: TextStyle(
+                                    fontSize: 14.0, color: Colors.black45),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10.0, right: 20.0),
+                          child: Container(
+                            height: 50.0,
+                            width: 50.0,
+                            color: Colors.white,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(50.0),
+                              color: Colors.white,
+                              elevation: 5.0,
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Container(
+                            height: 60.0,
+                            width: 60.0,
+                            color: Colors.white,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(50.0),
+                              color: Colors.green,
+                              elevation: 5.0,
+                              child: Icon(
+                                Icons.message,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10.0, left: 10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  color: Colors.red,
+                  height: 0,
+                ),
+                Container(
+                  color: Colors.white,
+                  child: Column(
+                    children: <Widget>[
+                      Center(
+                        child: Text(
+                          'To start calling contact who have',
+                          style:
+                              TextStyle(color: Colors.black54, fontSize: 18.0),
+                        ),
+                      ),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'WhatsApp, tap',
+                              style: TextStyle(
+                                  color: Colors.black54, fontSize: 18.0),
+                            ),
+                            Stack(
+                              alignment: Alignment.topCenter,
+                              children: <Widget>[
+                                Container(
+                                  height: 20.0,
+                                  width: 20.0,
+                                  color: Colors.white,
+                                  child: Material(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    elevation: 0.0,
+                                    child: Icon(
+                                      Icons.call,
+                                      color: Colors.black54,
+                                      size: 20.0,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: -3.0,
+                                  top: -3.0,
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.black54,
+                                    size: 16.0,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Text(
+                              ' at the bottom of your',
+                              style: TextStyle(
+                                  color: Colors.black54, fontSize: 18.0),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          'screen',
+                          style:
+                              TextStyle(color: Colors.black54, fontSize: 18.0),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ]),
-            new Text("This is notification Tab View"),
-            new Text("This is notification Tab View"),
-          ],
-          controller: _tabController,
-        ),
+                ),
+                Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10.0, right: 20.0),
+                          child: Container(
+                            height: 50.0,
+                            width: 50.0,
+                            color: Colors.white,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(50.0),
+                              color: Colors.white,
+                              elevation: 5.0,
+                              child: Icon(
+                                Icons.video_call,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Stack(
+                            alignment: Alignment.topCenter,
+                            children: <Widget>[
+                              Container(
+                                height: 60.0,
+                                width: 60.0,
+                                color: Colors.white,
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                  color: Colors.green,
+                                  elevation: 5.0,
+                                  child: Icon(
+                                    Icons.call,
+                                    color: Colors.white,
+                                    size: 30.0,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                right: 11.0,
+                                top: 11.0,
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: 18.0,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
